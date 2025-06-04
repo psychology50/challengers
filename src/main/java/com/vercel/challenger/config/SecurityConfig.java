@@ -46,6 +46,7 @@ public class SecurityConfig {
                         .anyExchange().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/login")
                         .authenticationSuccessHandler(oauth2AuthenticationSuccessHandler)
                 )
                 .logout(logout -> logout

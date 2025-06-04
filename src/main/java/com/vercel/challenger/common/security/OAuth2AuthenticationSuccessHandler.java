@@ -23,9 +23,7 @@ import java.util.concurrent.Executors;
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler implements ServerAuthenticationSuccessHandler {
     private final UserRepository userRepository;
-    private final Scheduler virtualThreadScheduler = Schedulers.fromExecutor(
-            Executors.newVirtualThreadPerTaskExecutor()
-    );
+    private final Scheduler virtualThreadScheduler = Schedulers.fromExecutor(Executors.newVirtualThreadPerTaskExecutor());
 
     @Override
     public Mono<Void> onAuthenticationSuccess(@NonNull WebFilterExchange exchange, Authentication authentication) {
@@ -69,10 +67,7 @@ public class OAuth2AuthenticationSuccessHandler implements ServerAuthenticationS
 
     @SuppressWarnings("BlockingMethodInNonBlockingContext")
     private Mono<User> saveUserAsync(User user) {
-        return Mono.fromCallable(() -> {
-                    log.info("Saving new user: {}", user);
-                    return userRepository.save(user);
-                })
+        return Mono.fromCallable(() -> userRepository.save(user))
                 .subscribeOn(virtualThreadScheduler)
                 .doOnError(e -> log.error("Error saving user: {}", e.getMessage(), e))
                 .onErrorMap(e -> new RuntimeException("Failed to save user", e));
