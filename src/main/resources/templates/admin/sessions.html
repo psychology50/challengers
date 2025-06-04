@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>세션 관리 - Admin</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            background: #ecf0f1;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        .refresh-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 20px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .refresh-btn:hover {
+            background: #2980b9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #34495e;
+            color: white;
+            font-weight: 500;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .status {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-authenticated {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-anonymous {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-expired {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .session-id {
+            font-family: monospace;
+            background: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        .no-sessions {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .timestamp {
+            font-size: 11px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🔍 세션 관리 대시보드</h1>
+        <p>현재 활성화된 모든 세션을 조회합니다</p>
+    </div>
+
+    <div class="stats">
+        <div class="stat-box">
+            <div class="stat-number" th:text="${totalSessions}">0</div>
+            <div class="stat-label">전체 세션</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" th:text="${activeSessions}">0</div>
+            <div class="stat-label">활성 세션</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" th:text="${authenticatedSessions}">0</div>
+            <div class="stat-label">인증된 세션</div>
+        </div>
+    </div>
+
+    <a class="refresh-btn" href="/admin/sessions">🔄 새로고침</a>
+
+    <div class="no-sessions" th:if="${#lists.isEmpty(sessions)}">
+        현재 활성화된 세션이 없습니다.
+    </div>
+
+    <table th:unless="${#lists.isEmpty(sessions)}">
+        <thead>
+        <tr>
+            <th>세션 ID</th>
+            <th>상태</th>
+            <th>사용자</th>
+            <th>OAuth2 제공자</th>
+            <th>생성 시간</th>
+            <th>마지막 접근</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="sessionInfo : ${sessions}">
+            <td>
+                <span class="session-id" th:text="${sessionInfo.shortSessionId}"></span>
+            </td>
+            <td>
+                        <span class="status"
+                              th:classappend="${sessionInfo.expired ? 'status-expired' : (sessionInfo.authenticated ? 'status-authenticated' : 'status-anonymous')}"
+                              th:text="${sessionInfo.status}">
+                        </span>
+            </td>
+            <td th:text="${sessionInfo.authenticated ? sessionInfo.username : '-'}">-</td>
+            <td th:text="${sessionInfo.oauth2Provider ?: '-'}">-</td>
+            <td>
+                <div th:text="${#temporals.format(sessionInfo.creationTime, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                <div class="timestamp" th:text="${#temporals.format(sessionInfo.creationTime, 'E')}"></div>
+            </td>
+            <td>
+                <div th:text="${#temporals.format(sessionInfo.lastAccessTime, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                <div class="timestamp" th:text="${#temporals.format(sessionInfo.lastAccessTime, 'E')}"></div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // 30초마다 자동 새로고침
+    setTimeout(() => {
+        window.location.reload();
+    }, 30000);
+</script>
+</body>
+</html>
