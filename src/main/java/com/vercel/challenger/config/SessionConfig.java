@@ -18,7 +18,7 @@ public class SessionConfig {
     @Bean
     public ReactiveSessionRepository<MapSession> reactiveSessionRepository() {
         var reactiveMapSessionRepository = new ReactiveMapSessionRepository(new ConcurrentHashMap<>());
-        reactiveMapSessionRepository.setDefaultMaxInactiveInterval(Duration.ofDays(7));
+        reactiveMapSessionRepository.setDefaultMaxInactiveInterval(Duration.ofMinutes(30));
 
         return reactiveMapSessionRepository;
     }
@@ -31,7 +31,7 @@ public class SessionConfig {
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
-                .maxAge(Duration.ofDays(7))
+                .maxAge(Duration.ofMinutes(30))
                 .sameSite("Lax")
         );
 
