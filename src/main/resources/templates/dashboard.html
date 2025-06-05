@@ -4,183 +4,177 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Challengers - 대시보드</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid #667eea;
-        }
-
-        .user-name {
-            font-weight: bold;
-            color: #333;
-        }
-
-        .logout-btn {
-            background: #ff4757;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-
-        .logout-btn:hover {
-            background: #ff3742;
-        }
-
-        .main-content {
-            padding: 2rem;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .welcome-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .welcome-title {
-            font-size: 2rem;
-            color: #333;
-            margin-bottom: 1rem;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .info-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .info-card h3 {
-            color: #667eea;
-            margin: 0 0 1rem 0;
-            font-size: 1.1rem;
-        }
-
-        .info-item {
-            margin: 0.5rem 0;
-            color: #666;
-        }
-
-        .info-label {
-            font-weight: bold;
-            color: #333;
-        }
-
-        .session-btn {
-            background: #667eea;
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .session-btn:hover {
-            background: #5a67d8;
-            transform: translateY(-1px);
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
 </head>
 <body>
 <div class="header">
-    <div class="logo">Challengers</div>
-    <div class="user-info">
-        <img alt="Profile" class="user-avatar" th:src="${picture}">
-        <span class="user-name" th:text="${name}">사용자</span>
-        <a class="logout-btn" href="/logout">로그아웃</a>
+    <div class="logo">🚀 Challengers</div>
+    <nav class="nav-menu">
+        <a class="nav-item" href="#">대시보드</a>
+        <a class="nav-item" th:href="@{/challenges/manage}">챌린지 관리</a>
+        <a class="nav-item" th:href="@{/participants}">참여자 목록</a>
+        <a class="nav-item" th:href="@{/settings}">설정</a>
+    </nav>
+    <div class="user-profile">
+        <div class="user-avatar" th:text="${user.nameInitial}">김</div>
+        <span th:text="${user.name}">김도전</span>
     </div>
 </div>
 
-<div class="main-content">
-    <div class="welcome-card">
-        <div class="welcome-title">🎉 환영합니다!</div>
-        <p th:text="|안녕하세요, ${name}님! Google OAuth 로그인에 성공했습니다.|">환영 메시지</p>
+<div class="container">
+    <div class="welcome-section">
+        <div class="welcome-title" th:text="'💪 도전하는 ' + ${currentMonth.month} + '월!'">💪 도전하는 11월!</div>
+        <div class="welcome-subtitle">오늘도 목표를 향해 한 걸음 더 나아가세요</div>
     </div>
 
-    <div class="info-grid">
-        <div class="info-card">
-            <h3>👤 사용자 정보</h3>
-            <div class="info-item">
-                <span class="info-label">이름:</span>
-                <span th:text="${name}">사용자명</span>
+    <div class="main-grid">
+        <div class="my-challenges">
+            <div class="section-header">
+                <h2 class="section-title">🎯 내 챌린지</h2>
+                <a class="add-challenge-btn" th:href="@{/challenges/manage}">+ 챌린지 관리</a>
             </div>
-            <div class="info-item">
-                <span class="info-label">이메일:</span>
-                <span th:text="${email}">이메일</span>
+
+            <!-- 챌린지가 있는 경우 -->
+            <div th:if="${not #lists.isEmpty(myChallenges)}">
+                <div class="challenge-item" th:data-challenge-id="${challenge.id}"
+                     th:each="challenge : ${myChallenges}">
+                    <div class="challenge-title" th:text="${challenge.title}">매일 30분 운동하기</div>
+                    <div class="challenge-description" th:text="${challenge.description}">
+                        건강한 생활을 위해 매일 30분씩 운동을 하겠습니다.
+                    </div>
+                    <div class="challenge-schedule" th:text="'📅 선택된 날짜: ' + ${challenge.scheduleText}">
+                        📅 선택된 날짜: 평일 전체 + 주말 일부 (총 22일)
+                    </div>
+                    <div class="challenge-progress">
+                        <span class="progress-text"
+                              th:text="${challenge.completedDays} + '/' + ${challenge.totalDays} + '일'">15/22일</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" th:style="'width: ' + ${challenge.completionRate} + '%'"></div>
+                        </div>
+                        <span class="progress-text" th:text="${challenge.completionRate} + '%'">68%</span>
+                    </div>
+                    <div class="challenge-actions">
+                        <button class="action-btn complete-btn"
+                                th:classappend="${challenge.isTodayCompleted} ? 'completed' : ''"
+                                th:text="${challenge.isTodayCompleted} ? '✅ 완료됨' : '✓ 오늘 완료'">✓ 오늘 완료
+                        </button>
+                        <button class="action-btn edit-btn">✏️ 수정</button>
+                        <button class="action-btn delete-btn">🗑️ 삭제</button>
+                    </div>
+                </div>
             </div>
-            <div class="info-item">
-                <span class="info-label">로그인 시간:</span>
-                <span th:text="${loginTime}">로그인 시간</span>
+
+            <!-- 챌린지가 없는 경우 -->
+            <div class="empty-state" th:if="${#lists.isEmpty(myChallenges)}">
+                <p>등록된 챌린지가 없습니다.</p>
+                <p>새로운 챌린지를 추가해보세요!</p>
             </div>
         </div>
 
-        <div class="info-card">
-            <h3>🔐 세션 정보</h3>
-            <div class="info-item">
-                <span class="info-label">세션 ID:</span>
-                <span th:text="${sessionId}">세션 ID</span>
+        <div class="calendar-section">
+            <div class="calendar-header">
+                <h3 class="calendar-title" id="calendarTitle"
+                    th:text="${currentMonth.year} + '년 ' + ${currentMonth.month} + '월'">2024년 11월</h3>
+                <div class="calendar-nav">
+                    <button class="nav-btn" onclick="previousMonth()">‹</button>
+                    <button class="nav-btn" onclick="nextMonth()">›</button>
+                </div>
             </div>
-            <div class="info-item">
-                <span class="info-label">상태:</span>
-                <span style="color: #28a745; font-weight: bold;">✅ 활성</span>
+
+            <div class="calendar-grid" id="calendar">
+                <!-- 캘린더는 JavaScript로 동적 생성 -->
             </div>
-            <div class="info-item">
-                <span class="info-label">저장소:</span>
-                <span>Redis</span>
+
+            <div class="calendar-legend">
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: #28a745;"></div>
+                    <span>완료</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: #667eea;"></div>
+                    <span>예정</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: #dc3545;"></div>
+                    <span>실패</span>
+                </div>
             </div>
-            <a class="session-btn" href="/session-info">세션 상세 정보 보기</a>
+        </div>
+
+        <div class="stats-panel">
+            <h3 class="section-title">📊 이번 달 성과</h3>
+            <div class="achievement-circle">
+                <div class="circle-chart"
+                     th:style="'background: conic-gradient(#667eea ' + ${statistics.achievementRate} + '%, #e9ecef ' + ${statistics.achievementRate} + '%)'">
+                    <div class="circle-inner">
+                        <div class="achievement-percent" th:text="${statistics.achievementRate} + '%'">62%</div>
+                        <div class="achievement-label">평균 달성률</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-item">
+                <span class="stat-label">총 챌린지</span>
+                <span class="stat-value" th:text="${statistics.totalChallenges} + '개'">3개</span>
+            </div>
+            <div class="stats-item">
+                <span class="stat-label">완료한 일</span>
+                <span class="stat-value" th:text="${statistics.completedDays} + '일'">45일</span>
+            </div>
+            <div class="stats-item">
+                <span class="stat-label">목표 일수</span>
+                <span class="stat-value" th:text="${statistics.targetDays} + '일'">70일</span>
+            </div>
+            <div class="stats-item">
+                <span class="stat-label">연속 달성</span>
+                <span class="stat-value" th:text="${statistics.consecutiveDays} + '일'">3일</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="participants-section">
+        <div class="section-header">
+            <h2 class="section-title">👥 함께하는 도전자들</h2>
+        </div>
+
+        <div class="participants-grid">
+            <div class="participant-card"
+                 style="cursor: pointer;"
+                 th:each="participant : ${participants}"
+                 th:onclick="'dashboardManager.handleParticipantClick(' + ${participant.id} + ')'">
+                <div class="participant-avatar" th:text="${participant.nameInitial}">이</div>
+                <div class="participant-name" th:text="${participant.name}">이성공</div>
+                <div class="participant-commitment" th:text='"+ ${participant.commitmentMessage} +"'>"꾸준함이 재능을 이긴다"
+                </div>
+                <div class="participant-stats" th:text="'이번 달 달성률: ' + ${participant.achievementRate} + '%'">이번 달 달성률:
+                    85%
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+<!-- 날짜 상세 모달 -->
+<div class="day-detail-modal" id="dayDetailModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modalTitle">11월 15일 내 챌린지</h3>
+            <button class="close-modal" onclick="closeDayModal()">×</button>
+        </div>
+        <div class="day-challenges" id="dayChallenges">
+            <!-- 날짜별 챌린지 상세 정보가 JavaScript로 동적 생성 -->
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    window.challengeCalendarData = /*[[${challengeCalendarData}]]*/ {};
+
+    if (!window.challengeCalendarData) {
+        window.challengeCalendarData = {};
+    }
+</script>
+
+<script th:src="@{/js/dashboard.js}"></script>
 </body>
 </html>

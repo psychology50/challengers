@@ -49,7 +49,6 @@ public class AdminController {
     }
 
     private Flux<SessionDto> getAllSessions() {
-        // ReactiveMapSessionRepository의 내부 Map에 접근
         if (sessionRepository instanceof ReactiveMapSessionRepository mapRepo) {
             return getSessionsFromMapRepository(mapRepo);
         }
@@ -60,7 +59,6 @@ public class AdminController {
     @SuppressWarnings("unchecked")
     private Flux<SessionDto> getSessionsFromMapRepository(ReactiveMapSessionRepository mapRepo) {
         try {
-            // 리플렉션으로 내부 Map 접근
             Field sessionsField = ReactiveMapSessionRepository.class.getDeclaredField("sessions");
             sessionsField.setAccessible(true);
             Map<String, MapSession> sessions = (Map<String, MapSession>) sessionsField.get(mapRepo);
@@ -81,7 +79,6 @@ public class AdminController {
         dto.setMaxInactiveInterval(session.getMaxInactiveInterval());
         dto.setExpired(session.isExpired());
 
-        // Spring Security 인증 정보 확인
         Object securityContext = session.getAttribute("SPRING_SECURITY_CONTEXT");
         if (securityContext instanceof SecurityContext context) {
             Authentication auth = context.getAuthentication();
@@ -98,11 +95,9 @@ public class AdminController {
         return dto;
     }
 
-    // Session DTO 클래스
     @Setter
     @Getter
     public static class SessionDto {
-        // Getters and Setters
         private String sessionId;
         private Instant creationTime;
         private Instant lastAccessTime;

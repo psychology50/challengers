@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Challengers - 이성공님의 프로필</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-item {
+            color: #333;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .back-btn {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .profile-header {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .profile-name {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.8rem;
+        }
+
+        .profile-commitment {
+            font-size: 1.2rem;
+            color: #667eea;
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .calendar-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .calendar-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #5a67d8;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .calendar-day-header {
+            background: #667eea;
+            color: white;
+            padding: 0.8rem 0.3rem;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .calendar-day {
+            background: white;
+            padding: 0.8rem 0.3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            background: #f8f9fa;
+        }
+
+        .calendar-day.other-month {
+            color: #ccc;
+            background: #f8f9fa;
+        }
+
+        .calendar-day.today {
+            background: #ffc107;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .calendar-day.has-challenges {
+            border: 2px solid #667eea;
+        }
+
+        .challenge-indicators {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+            margin-top: 3px;
+            justify-content: center;
+        }
+
+        .challenge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #667eea;
+        }
+
+        .challenge-dot.completed {
+            background: #28a745;
+        }
+
+        .challenge-dot.missed {
+            background: #dc3545;
+        }
+
+        .day-number {
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .calendar-legend {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .challenges-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .challenge-item {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .challenge-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .challenge-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .challenge-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-bar {
+            flex: 1;
+            background: #e9ecef;
+            height: 8px;
+            border-radius: 4px;
+            margin: 0 1rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .comments-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            grid-column: 1 / -1;
+        }
+
+        .comment-form {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .comment-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            resize: vertical;
+            font-family: inherit;
+            margin-bottom: 1rem;
+        }
+
+        .comment-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .comment-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .comment-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .comment-btn:hover {
+            background: #5a67d8;
+        }
+
+        .comment-count {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .comments-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .comment {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border-left: 3px solid #667eea;
+        }
+
+        .comment.reply {
+            margin-left: 2rem;
+            border-left-color: #28a745;
+            background: #f0f9f0;
+        }
+
+        .comment.edited {
+            border-left-color: #ffc107;
+        }
+
+        .comment.deleted {
+            border-left-color: #dc3545;
+            background: #ffeaea;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .comment-author {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .comment-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .comment-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .comment-time {
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        .comment-status {
+            font-size: 0.8rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .comment-content {
+            color: #333;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .comment-content.deleted-text {
+            color: #999;
+            font-style: italic;
+        }
+
+        .comment-controls {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: #667eea;
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .control-btn.danger {
+            color: #dc3545;
+        }
+
+        .control-btn.danger:hover {
+            background: rgba(220, 53, 69, 0.1);
+        }
+
+        .load-more-btn {
+            width: 100%;
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .load-more-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .day-detail-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .day-detail-modal.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 70vh;
+            overflow-y: auto;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+        }
+
+        .day-detail-modal.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            padding: 0.5rem;
+        }
+
+        .day-challenges {
+            margin-bottom: 1rem;
+        }
+
+        .day-challenge-item {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .day-challenge-item.completed {
+            border-left-color: #28a745;
+            background: #f0f9f0;
+        }
+
+        .day-challenge-item.missed {
+            border-left-color: #dc3545;
+            background: #ffeaea;
+        }
+
+        .day-challenge-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.3rem;
+        }
+
+        .day-challenge-status {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .day-challenge-status.completed {
+            color: #28a745;
+        }
+
+        .day-challenge-status.missed {
+            color: #dc3545;
+        }
+
+        .day-challenge-status.pending {
+            color: #ffc107;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .comment.reply {
+                margin-left: 1rem;
+            }
+
+            .calendar-day {
+                min-height: 60px;
+                padding: 0.5rem 0.2rem;
+            }
+
+            .calendar-day-header {
+                padding: 0.6rem 0.2rem;
+                font-size: 0.7rem;
+            }
+
+            .day-number {
+                font-size: 0.8rem;
+            }
+
+            .challenge-dot {
+                width: 4px;
+                height: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="logo">🚀 Challengers</div>
+    <nav class="nav-menu">
+        <a class="nav-item" href="dashboard.html">대시보드</a>
+        <a class="nav-item" href="challenge-form.html">챌린지 추가</a>
+        <a class="nav-item" href="#">참여자 목록</a>
+        <a class="nav-item" href="#">설정</a>
+    </nav>
+    <a class="back-btn" href="dashboard.html">← 대시보드로</a>
+</div>
+
+<div class="container">
+    <div class="profile-header">
+        <div class="profile-avatar">이</div>
+        <div class="profile-name">이성공</div>
+        <div class="profile-commitment">
+            "꾸준함이 재능을 이긴다"
+        </div>
+
+        <div class="profile-stats">
+            <div class="stat-item">
+                <div class="stat-value">85%</div>
+                <div class="stat-label">이번 달 달성률</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">26일</div>
+                <div class="stat-label">완료한 날</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">3개</div>
+                <div class="stat-label">진행 중인 챌린지</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">7일</div>
+                <div class="stat-label">연속 달성</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-grid">
+        <div class="calendar-section">
+            <div class="calendar-header">
+                <h3 class="calendar-title" id="calendarTitle">2024년 11월</h3>
+                <div class="calendar-nav">
+                    <button class="nav-btn" onclick="previousMonth()">‹</button>
+                    <button class="nav-btn" onclick="nextMonth()">›</button>
+                </div>
+            </div>
+
+            <div class="calendar-grid" id="calendar">
+                <!-- 캘린더가 여기에 생성됩니다 -->
+            </div>
+
+            <div class="calendar-legend">
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: #28a745;"></div>
+                    <span>완료</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: #667eea;"></div>
+                    <span>예정</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: #dc3545;"></div>
+                    <span>실패</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="challenges-section">
+            <h3 class="section-title">🎯 이번 달 챌린지</h3>
+
+            <div class="challenge-item">
+                <div class="challenge-title">매일 1시간 독서하기</div>
+                <div class="challenge-description">
+                    자기계발을 위해 매일 1시간씩 책을 읽는 습관을 만들어가고 있습니다.
+                </div>
+                <div class="challenge-progress">
+                    <span class="progress-text">28/30일</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 93%"></div>
+                    </div>
+                    <span class="progress-text">93%</span>
+                </div>
+            </div>
+
+            <div class="challenge-item">
+                <div class="challenge-title">운동 30분 하기</div>
+                <div class="challenge-description">
+                    건강 관리를 위해 매일 30분씩 운동을 하고 있습니다.
+                </div>
+                <div class="challenge-progress">
+                    <span class="progress-text">25/30일</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 83%"></div>
+                    </div>
+                    <span class="progress-text">83%</span>
+                </div>
+            </div>
+
+            <div class="challenge-item">
+                <div class="challenge-title">영어 공부 1시간</div>
+                <div class="challenge-description">
+                    영어 실력 향상을 위해 매일 1시간씩 영어 공부를 하고 있습니다.
+                </div>
+                <div class="challenge-progress">
+                    <span class="progress-text">22/30일</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 73%"></div>
+                    </div>
+                    <span class="progress-text">73%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="comments-section">
+        <h3 class="section-title">💬 응원 댓글</h3>
+
+        <div class="comment-form">
+                <textarea
+                        class="comment-textarea"
+                        id="commentInput"
+                        placeholder="이성공님에게 응원의 메시지를 남겨보세요!"
+                ></textarea>
+            <div class="comment-actions">
+                <div class="comment-count">댓글 <span id="commentCount">8</span>개</div>
+                <button class="comment-btn" onclick="addComment()">댓글 작성</button>
+            </div>
+        </div>
+
+        <div class="comments-list" id="commentsList">
+            <div class="comment">
+                <div class="comment-header">
+                    <div class="comment-author">
+                        <div class="comment-avatar">김</div>
+                        <div>
+                            <div class="comment-name">김도전</div>
+                            <div class="comment-time">2시간 전</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="comment-content">
+                    정말 대단하세요! 꾸준히 하시는 모습이 정말 인상적입니다. 저도 자극받아서 더 열심히 해야겠어요! 💪
+                </div>
+                <div class="comment-controls">
+                    <button class="control-btn" onclick="replyToComment(this)">답글</button>
+                    <button class="control-btn" onclick="editComment(this)">수정</button>
+                    <button class="control-btn danger" onclick="deleteComment(this)">삭제</button>
+                </div>
+            </div>
+
+            <div class="comment reply">
+                <div class="comment-header">
+                    <div class="comment-author">
+                        <div class="comment-avatar">이</div>
+                        <div>
+                            <div class="comment-name">이성공</div>
+                            <div class="comment-time">1시간 전</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="comment-content">
+                    @김도전 감사합니다! 함께 화이팅해요! 🔥
+                </div>
+                <div class="comment-controls">
+                    <button class="control-btn" onclick="editComment(this)">수정</button>
+                    <button class="control-btn danger" onclick="deleteComment(this)">삭제</button>
+                </div>
+            </div>
+
+            <div class="comment edited">
+                <div class="comment-header">
+                    <div class="comment-author">
+                        <div class="comment-avatar">박</div>
+                        <div>
+                            <div class="comment-name">박노력</div>
+                            <div class="comment-time">3시간 전</div>
+                        </div>
+                    </div>
+                    <div class="comment-status">(수정됨)</div>
+                </div>
+                <div class="comment-content">
+                    독서 습관 정말 부럽습니다! 어떤 책을 읽고 계신지 궁금해요. 추천 도서도 있다면 공유해주세요!
+                </div>
+                <div class="comment-controls">
+                    <button class="control-btn" onclick="replyToComment(this)">답글</button>
+                    <button class="control-btn" onclick="editComment(this)">수정</button>
+                    <button class="control-btn danger" onclick="deleteComment(this)">삭제</button>
+                </div>
+            </div>
+
+            <div class="comment">
+                <div class="comment-header">
+                    <div class="comment-author">
+                        <div class="comment-avatar">정</div>
+                        <div>
+                            <div class="comment-name">정열정</div>
+                            <div class="comment-time">5시간 전</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="comment-content">
+                    운동도 꾸준히 하시고 정말 멋져요! 어떤 운동을 주로 하시나요?
+                </div>
+                <div class="comment-controls">
+                    <button class="control-btn" onclick="replyToComment(this)">답글</button>
+                    <button class="control-btn" onclick="editComment(this)">수정</button>
+                    <button class="control-btn danger" onclick="deleteComment(this)">삭제</button>
+                </div>
+            </div>
+
+            <div class="comment deleted">
+                <div class="comment-header">
+                    <div class="comment-author">
+                        <div class="comment-avatar">최</div>
+                        <div>
+                            <div class="comment-name">최도전</div>
+                            <div class="comment-time">1일 전</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="comment-content deleted-text">
+                    삭제된 댓글입니다.
+                </div>
+            </div>
+
+            <div class="comment">
+                <div class="comment-header">
+                    <div class="comment-author">
+                        <div class="comment-avatar">강</div>
+                        <div>
+                            <div class="comment-name">강성실</div>
+                            <div class="comment-time">1일 전</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="comment-content">
+                    영어 공부도 함께 하고 계시는군요! 저도 영어 공부 중인데, 혹시 좋은 학습법이 있다면 공유해주세요!
+                </div>
+                <div class="comment-controls">
+                    <button class="control-btn" onclick="replyToComment(this)">답글</button>
+                    <button class="control-btn" onclick="editComment(this)">수정</button>
+                    <button class="control-btn danger" onclick="deleteComment(this)">삭제</button>
+                </div>
+            </div>
+        </div>
+
+        <button class="load-more-btn" id="loadMoreBtn" onclick="loadMoreComments()">
+            📄 이전 댓글 더보기
+        </button>
+    </div>
+</div>
+
+<!-- 날짜 상세 모달 -->
+<div class="day-detail-modal" id="dayDetailModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modalTitle">11월 15일 챌린지</h3>
+            <button class="close-modal" onclick="closeDayModal()">×</button>
+        </div>
+        <div class="day-challenges" id="dayChallenges">
+            <!-- 날짜별 챌린지 상세 정보가 여기에 표시됩니다 -->
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentDate = new Date();
+    let commentCount = 8;
+    let isEditing = false;
+    let editingElement = null;
+
+    // 챌린지 데이터 (예시)
+    const challengeData = {
+        '2024-11-01': {'독서': 'completed', '운동': 'completed', '영어': 'completed'},
+        '2024-11-02': {'독서': 'completed', '운동': 'missed', '영어': 'completed'},
+        '2024-11-03': {'독서': 'completed', '운동': 'completed', '영어': 'completed'},
+        '2024-11-04': {'독서': 'completed', '운동': 'completed', '영어': 'missed'},
+        '2024-11-05': {'독서': 'completed', '운동': 'completed', '영어': 'completed'},
+        '2024-11-06': {'독서': 'missed', '운동': 'completed', '영어': 'completed'},
+        '2024-11-07': {'독서': 'completed', '운동': 'completed', '영어': 'completed'},
+        '2024-11-08': {'독서': 'completed', '운동': 'completed', '영어': 'completed'},
+        '2024-11-09': {'독서': 'completed', '운동': 'missed', '영어': 'completed'},
+        '2024-11-10': {'독서': 'completed', '운동': 'completed', '영어': 'completed'},
+        '2024-11-11': {'독서': 'completed', '운동': 'completed', '영어': 'completed'},
+        '2024-11-12': {'독서': 'completed', '운동': 'completed', '영어': 'missed'},
+        '2024-11-13': {'독서': 'completed', '운동': 'completed', '영어': 'completed'},
+        '2024-11-14': {'독서': 'completed', '운동': 'completed', '영어': 'completed'},
+        '2024-11-15': {'독서': 'completed', '운동': 'completed', '영어': 'completed'},
+        '2024-11-16': {'독서': 'pending', '운동': 'pending', '영어': 'pending'},
+        '2024-11-17': {'독서': 'pending', '운동': 'pending', '영어': 'pending'},
+        '2024-11-18': {'독서': 'pending', '운동': 'pending', '영어': 'pending'},
+        '2024-11-19': {'독서': 'pending', '운동': 'pending', '영어': 'pending'},
+        '2024-11-20': {'독서': 'pending', '운동': 'pending', '영어': 'pending'}
+    };
+
+    // 페이지 로드 시 초기화
+    document.addEventListener('DOMContentLoaded', function () {
+        generateCalendar();
+    });
+
+    // 캘린더 생성
+    function generateCalendar() {
+        const calendar = document.getElementById('calendar');
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+
+        // 캘린더 제목 업데이트
+        document.getElementById('calendarTitle').textContent = `${year}년 ${month + 1}월`;
+
+        // 캘린더 초기화
+        calendar.innerHTML = '';
+
+        // 요일 헤더
+        const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+        daysOfWeek.forEach(day => {
+            const dayHeader = document.createElement('div');
+            dayHeader.className = 'calendar-day-header';
+            dayHeader.textContent = day;
+            calendar.appendChild(dayHeader);
+        });
+
+        // 이번 달 첫날과 마지막날
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+        const firstDayOfWeek = firstDay.getDay();
+        const daysInMonth = lastDay.getDate();
+
+        // 이전 달 마지막 날들
+        const prevMonth = new Date(year, month, 0);
+        const daysInPrevMonth = prevMonth.getDate();
+
+        for (let i = firstDayOfWeek - 1; i >= 0; i--) {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'calendar-day other-month';
+            dayElement.innerHTML = `<div class="day-number">${daysInPrevMonth - i}</div>`;
+            calendar.appendChild(dayElement);
+        }
+
+        // 이번 달 날들
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'calendar-day';
+
+            const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            dayElement.dataset.date = dateString;
+
+            // 오늘 날짜 표시
+            const today = new Date();
+            if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+                dayElement.classList.add('today');
+            }
+
+            // 날짜 번호
+            const dayNumber = document.createElement('div');
+            dayNumber.className = 'day-number';
+            dayNumber.textContent = day;
+            dayElement.appendChild(dayNumber);
+
+            // 챌린지 데이터가 있는 경우
+            if (challengeData[dateString]) {
+                dayElement.classList.add('has-challenges');
+
+                const indicatorsContainer = document.createElement('div');
+                indicatorsContainer.className = 'challenge-indicators';
+
+                const challenges = challengeData[dateString];
+                Object.entries(challenges).forEach(([challenge, status]) => {
+                    const dot = document.createElement('div');
+                    dot.className = `challenge-dot ${status}`;
+                    dot.title = `${challenge}: ${getStatusText(status)}`;
+                    indicatorsContainer.appendChild(dot);
+                });
+
+                dayElement.appendChild(indicatorsContainer);
+            }
+
+            dayElement.onclick = () => showDayDetail(dateString, day);
+            calendar.appendChild(dayElement);
+        }
+
+        // 다음 달 첫날들
+        const totalCells = calendar.children.length - 7; // 헤더 제외
+        const remainingCells = 42 - totalCells; // 6주 × 7일
+
+        for (let day = 1; day <= remainingCells; day++) {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'calendar-day other-month';
+            dayElement.innerHTML = `<div class="day-number">${day}</div>`;
+            calendar.appendChild(dayElement);
+        }
+    }
+
+    // 상태 텍스트 반환
+    function getStatusText(status) {
+        switch (status) {
+            case 'completed':
+                return '완료';
+            case 'missed':
+                return '실패';
+            case 'pending':
+                return '예정';
+            default:
+                return '예정';
+        }
+    }
+
+    // 날짜 상세 정보 표시
+    function showDayDetail(dateString, day) {
+        const challenges = challengeData[dateString];
+        if (!challenges) {
+            alert('해당 날짜에는 챌린지가 없습니다.');
+            return;
+        }
+
+        const modal = document.getElementById('dayDetailModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const dayChallenges = document.getElementById('dayChallenges');
+
+        modalTitle.textContent = `${currentDate.getMonth() + 1}월 ${day}일 챌린지`;
+
+        dayChallenges.innerHTML = '';
+
+        Object.entries(challenges).forEach(([challenge, status]) => {
+            const challengeItem = document.createElement('div');
+            challengeItem.className = `day-challenge-item ${status}`;
+            challengeItem.innerHTML = `
+                    <div class="day-challenge-title">${challenge}</div>
+                    <div class="day-challenge-status ${status}">${getStatusText(status)}</div>
+                `;
+            dayChallenges.appendChild(challengeItem);
+        });
+
+        modal.classList.add('show');
+    }
+
+    // 모달 닫기
+    function closeDayModal() {
+        document.getElementById('dayDetailModal').classList.remove('show');
+    }
+
+    // 모달 외부 클릭 시 닫기
+    document.getElementById('dayDetailModal').addEventListener('click', function (e) {
+        if (e.target === this) {
+            closeDayModal();
+        }
+    });
+
+    // 이전 달
+    function previousMonth() {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        generateCalendar();
+    }
+
+    // 다음 달
+    function nextMonth() {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        generateCalendar();
+    }
+
+    // 댓글 작성
+    function addComment() {
+        const input = document.getElementById('commentInput');
+        const content = input.value.trim();
+
+        if (!content) {
+            alert('댓글 내용을 입력해주세요.');
+            return;
+        }
+
+        const comment = createCommentElement({
+            author: '김도전',
+            avatar: '김',
+            content: content,
+            time: '방금 전',
+            isOwn: true
+        });
+
+        const commentsList = document.getElementById('commentsList');
+        commentsList.insertBefore(comment, commentsList.firstChild);
+
+        input.value = '';
+        commentCount++;
+        document.getElementById('commentCount').textContent = commentCount;
+
+        comment.classList.add('fade-in');
+    }
+
+    // 댓글 요소 생성
+    function createCommentElement(data) {
+        const comment = document.createElement('div');
+        comment.className = 'comment';
+        comment.innerHTML = `
+                <div class="comment-header">
+                    <div class="comment-author">
+                        <div class="comment-avatar">${data.avatar}</div>
+                        <div>
+                            <div class="comment-name">${data.author}</div>
+                            <div class="comment-time">${data.time}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="comment-content">${data.content}</div>
+                <div class="comment-controls">
+                    <button class="control-btn" onclick="replyToComment(this)">답글</button>
+                    ${data.isOwn ? '<button class="control-btn" onclick="editComment(this)">수정</button>' : ''}
+                    ${data.isOwn ? '<button class="control-btn danger" onclick="deleteComment(this)">삭제</button>' : ''}
+                </div>
+            `;
+        return comment;
+    }
+
+    // 답글 작성
+    function replyToComment(btn) {
+        const comment = btn.closest('.comment');
+        let replyForm = comment.nextElementSibling;
+
+        if (replyForm && replyForm.classList.contains('reply-form')) {
+            replyForm.remove();
+            return;
+        }
+
+        const authorName = comment.querySelector('.comment-name').textContent;
+
+        const replyFormHtml = `
+                <div class="comment reply-form" style="margin-left: 2rem; background: #e3f2fd;">
+                    <textarea class="comment-textarea" placeholder="@${authorName}에게 답글을 작성하세요..." style="min-height: 80px;"></textarea>
+                    <div class="comment-actions">
+                        <button class="comment-btn" onclick="submitReply(this, '${authorName}')">답글 작성</button>
+                        <button class="comment-btn" style="background: #6c757d;" onclick="cancelReply(this)">취소</button>
+                    </div>
+                </div>
+            `;
+
+        comment.insertAdjacentHTML('afterend', replyFormHtml);
+    }
+
+    // 답글 제출
+    function submitReply(btn, targetAuthor) {
+        const replyForm = btn.closest('.reply-form');
+        const textarea = replyForm.querySelector('textarea');
+        const content = textarea.value.trim();
+
+        if (!content) {
+            alert('답글 내용을 입력해주세요.');
+            return;
+        }
+
+        const reply = createCommentElement({
+            author: '김도전',
+            avatar: '김',
+            content: `@${targetAuthor} ${content}`,
+            time: '방금 전',
+            isOwn: true
+        });
+
+        reply.classList.add('reply');
+        replyForm.replaceWith(reply);
+
+        commentCount++;
+        document.getElementById('commentCount').textContent = commentCount;
+
+        reply.classList.add('fade-in');
+    }
+
+    // 답글 취소
+    function cancelReply(btn) {
+        btn.closest('.reply-form').remove();
+    }
+
+    // 댓글 수정
+    function editComment(btn) {
+        if (isEditing) {
+            alert('이미 수정 중인 댓글이 있습니다.');
+            return;
+        }
+
+        const comment = btn.closest('.comment');
+        const contentElement = comment.querySelector('.comment-content');
+        const originalContent = contentElement.textContent;
+
+        isEditing = true;
+        editingElement = comment;
+
+        contentElement.innerHTML = `
+                <textarea class="comment-textarea" style="min-height: 80px;">${originalContent}</textarea>
+                <div style="margin-top: 1rem;">
+                    <button class="comment-btn" onclick="saveEdit()">저장</button>
+                    <button class="comment-btn" style="background: #6c757d; margin-left: 0.5rem;" onclick="cancelEdit('${originalContent}')">취소</button>
+                </div>
+            `;
+    }
+
+    // 수정 저장
+    function saveEdit() {
+        const textarea = editingElement.querySelector('textarea');
+        const newContent = textarea.value.trim();
+
+        if (!newContent) {
+            alert('댓글 내용을 입력해주세요.');
+            return;
+        }
+
+        const contentElement = editingElement.querySelector('.comment-content');
+        contentElement.innerHTML = newContent;
+
+        // 수정됨 표시 추가
+        editingElement.classList.add('edited');
+        const header = editingElement.querySelector('.comment-header');
+        if (!header.querySelector('.comment-status')) {
+            header.insertAdjacentHTML('beforeend', '<div class="comment-status">(수정됨)</div>');
+        }
+
+        isEditing = false;
+        editingElement = null;
+    }
+
+    // 수정 취소
+    function cancelEdit(originalContent) {
+        const contentElement = editingElement.querySelector('.comment-content');
+        contentElement.innerHTML = originalContent;
+
+        isEditing = false;
+        editingElement = null;
+    }
+
+    // 댓글 삭제
+    function deleteComment(btn) {
+        if (!confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
+            return;
+        }
+
+        const comment = btn.closest('.comment');
+        const contentElement = comment.querySelector('.comment-content');
+        const controlsElement = comment.querySelector('.comment-controls');
+
+        // 삭제된 댓글로 표시
+        comment.classList.add('deleted');
+        contentElement.innerHTML = '삭제된 댓글입니다.';
+        contentElement.classList.add('deleted-text');
+        controlsElement.remove();
+
+        // 댓글 수 감소
+        commentCount--;
+        document.getElementById('commentCount').textContent = commentCount;
+    }
+
+    // 더보기 기능
+    function loadMoreComments() {
+        const moreComments = [
+            {author: '윤꾸준', avatar: '윤', content: '정말 대단한 의지력이세요! 저도 배워가겠습니다.', time: '2일 전'},
+            {author: '서성장', avatar: '서', content: '매일 보는 것만으로도 동기부여가 됩니다!', time: '3일 전'}
+        ];
+
+        const commentsList = document.getElementById('commentsList');
+
+        moreComments.forEach(data => {
+            const comment = createCommentElement(data);
+            commentsList.appendChild(comment);
+            comment.classList.add('fade-in');
+        });
+
+        commentCount += moreComments.length;
+        document.getElementById('commentCount').textContent = commentCount;
+
+        // 더보기 버튼 숨기기 (더 이상 댓글이 없는 경우)
+        document.getElementById('loadMoreBtn').style.display = 'none';
+    }
+
+    // Enter 키로 댓글 작성
+    document.getElementById('commentInput').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            addComment();
+        }
+    });
+</script>
+</body>
+</html>

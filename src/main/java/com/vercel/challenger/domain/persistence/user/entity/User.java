@@ -21,7 +21,7 @@ import java.util.List;
 public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Challenge> challenges = new ArrayList<>();
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,6 +35,10 @@ public class User {
     private String profileImageUrl;
     @Column(name = "commitment_message")
     private String commitmentMessage;
+    @Column(name = "completed_days")
+    private int completedDays;
+    @Column(name = "consecutive_days")
+    private int consecutiveDays;
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -52,6 +56,18 @@ public class User {
 
     public static User of(String googleId, String email, String name, String profileImageUrl) {
         return new User(googleId, email, name, profileImageUrl);
+    }
+
+    public void increaseCompletedDays() {
+        this.completedDays++;
+    }
+
+    public void increaseConsecutiveDays() {
+        this.consecutiveDays++;
+    }
+
+    public void resetConsecutiveDays() {
+        this.consecutiveDays = 0;
     }
 
     @Override

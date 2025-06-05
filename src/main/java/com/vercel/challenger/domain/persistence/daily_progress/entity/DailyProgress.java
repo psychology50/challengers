@@ -44,6 +44,10 @@ public class DailyProgress {
         this.completedAt = LocalDateTime.now();
     }
 
+    public boolean isCompleted() {
+        return completedAt != null;
+    }
+
     private void connectChallenge(Challenge challenge) {
         if (this.challenge != null) {
             this.challenge.getDailyProgresses().remove(this);

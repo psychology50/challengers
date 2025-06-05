@@ -65,6 +65,43 @@ public class Challenge {
         this.description = description;
     }
 
+    public boolean isCompletedOn(LocalDateTime date) {
+        Assert.notNull(date, "date must not be null");
+
+        return dailyProgresses.stream()
+                .anyMatch(dp -> dp.getTargetDay() == date.getDayOfMonth() && dp.isCompleted());
+    }
+
+    public int getTotalDays() {
+        if (dailyProgresses.isEmpty()) {
+            return 0;
+        }
+
+        return dailyProgresses.size();
+    }
+
+    public int getCompletedDays() {
+        if (dailyProgresses.isEmpty()) {
+            return 0;
+        }
+
+        return (int) dailyProgresses.stream()
+                .filter(DailyProgress::isCompleted)
+                .count();
+    }
+
+    public int getCompletionRate() {
+        if (dailyProgresses.isEmpty()) {
+            return 0;
+        }
+
+        var completedDays = dailyProgresses.stream()
+                .filter(DailyProgress::isCompleted)
+                .count();
+
+        return (int) ((completedDays * 100) / dailyProgresses.size());
+    }
+
     private void connectUser(User user) {
         if (this.user != null) {
             this.user.getChallenges().remove(this);

@@ -1,40 +1,63 @@
 package com.vercel.challenger.application.controller;
 
+import com.vercel.challenger.application.dto.CurrentMonthResponse;
+import com.vercel.challenger.application.dto.UserResponse;
+import com.vercel.challenger.domain.persistence.challenge.service.ChallengeCalenderReadService;
+import com.vercel.challenger.domain.persistence.challenge.service.ChallengeMonthlyStatisticsService;
+import com.vercel.challenger.domain.persistence.challenge.service.MyChallengeReadService;
+import com.vercel.challenger.domain.persistence.user.service.ParticipantReadService;
+import com.vercel.challenger.domain.persistence.user.service.UserReadService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.server.WebSession;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.Executors;
 
 @Slf4j
 @Controller
-public class MainController {
+@RequiredArgsConstructor
+public class DashboardController {
+    private final UserReadService userSearchService;
+    private final MyChallengeReadService myChallengesReadService;
+    private final ChallengeCalenderReadService challengeCalendarReadService;
+    private final ChallengeMonthlyStatisticsService challengeMonthlyStatisticsService;
+    private final ParticipantReadService participantReadService;
+
     @GetMapping("/dashboard")
-    public Mono<String> dashboard(
-            @AuthenticationPrincipal OAuth2User principal,
-            WebSession session,
-            Model model
-    ) {
-        return Mono.fromCallable(() -> {
-            // 사용자 정보를 세션에 저장
-            session.getAttributes().put("user_name", principal.getAttribute("name"));
-            session.getAttributes().put("user_email", principal.getAttribute("email"));
-            session.getAttributes().put("user_picture", principal.getAttribute("picture"));
-            session.getAttributes().put("login_time", System.currentTimeMillis());
+    public Mono<String> dashboard(@AuthenticationPrincipal OAuth2User principal, Model model) {
+        return Mono.fromCallable(() -> userSearchService.execute(principal.getName()))
+                .flatMap(user -> {
+                    model.addAttribute("user", UserResponse.from(user));
 
-            // 모델에 데이터 추가
-            model.addAttribute("name", principal.getAttribute("name"));
-            model.addAttribute("email", principal.getAttribute("email"));
-            model.addAttribute("picture", principal.getAttribute("picture"));
-            model.addAttribute("sessionId", session.getId());
-            model.addAttribute("loginTime", LocalDateTime.now().toString());
+                    var now = LocalDateTime.now();
+                    model.addAttribute("currentMonth", CurrentMonthResponse.from(now));
 
-            return "dashboard";
-        });
+                    var challenges = Mono.fromCallable(() -> myChallengesReadService.execute(user.getId(), now))
+                            .doOnNext(data -> model.addAttribute("myChallenges", data))
+                            .then();
+
+                    var calendar = Mono.fromCallable(() -> challengeCalendarReadService.execute(user.getId(), now))
+                            .doOnNext(data -> model.addAttribute("challengeCalendarData", data))
+                            .then();
+
+                    var statistics = Mono.fromCallable(() -> challengeMonthlyStatisticsService.execute(user.getId(), now))
+                            .doOnNext(data -> model.addAttribute("statistics", data))
+                            .then();
+
+                    var participants = Mono.fromCallable(() -> participantReadService.execute(user.getId(), now))
+                            .doOnNext(data -> model.addAttribute("participants", data))
+                            .then();
+
+                    return Mono.when(challenges, calendar, statistics, participants)
+                            .thenReturn("dashboard");
+                })
+                .subscribeOn(Schedulers.fromExecutor(Executors.newVirtualThreadPerTaskExecutor()));
     }
 }
