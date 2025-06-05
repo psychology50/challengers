@@ -1,5 +1,6 @@
 package com.vercel.challenger.domain.persistence.user.entity;
 
+import com.vercel.challenger.domain.persistence.challenge.entity.Challenge;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -9,6 +10,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -16,29 +19,25 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Challenge> challenges = new ArrayList<>();
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name = "google_id", nullable = false, unique = true)
     private String googleId;
-
     @Column(name = "email", nullable = false, unique = true)
     private String email;
-
     @Column(name = "name", nullable = false)
     private String name;
-
     @Column(name = "profile_image_url")
     private String profileImageUrl;
-
     @Column(name = "commitment_message")
     private String commitmentMessage;
-
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
