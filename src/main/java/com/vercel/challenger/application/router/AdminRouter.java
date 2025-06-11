@@ -1,4 +1,4 @@
-package com.vercel.challenger.application.controller;
+package com.vercel.challenger.application.router;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/admin/sessions")
 @RequiredArgsConstructor
-public class AdminController {
+public class AdminRouter {
     private final ReactiveSessionRepository<MapSession> sessionRepository;
 
     @GetMapping

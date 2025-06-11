@@ -1,4 +1,4 @@
-package com.vercel.challenger.application.controller;
+package com.vercel.challenger.application.router;
 
 import com.vercel.challenger.application.dto.CurrentMonthResponse;
 import com.vercel.challenger.application.dto.UserResponse;
@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-public class DashboardController {
+public class DashboardRouter {
     private final UserReadService userSearchService;
     private final MyChallengeReadService myChallengesReadService;
     private final ChallengeCalenderReadService challengeCalendarReadService;
@@ -32,6 +32,11 @@ public class DashboardController {
 
     @GetMapping("/dashboard")
     public Mono<String> dashboard(@AuthenticationPrincipal OAuth2User principal, Model model) {
+        log.info("principal = {}", principal);
+        if (principal != null) {
+            log.info("User ID: {}", (String) principal.getAttribute("sub"));
+        }
+
         return Mono.fromCallable(() -> userSearchService.execute(principal.getName()))
                 .flatMap(user -> {
                     model.addAttribute("user", UserResponse.from(user));

@@ -1,4 +1,4 @@
-package com.vercel.challenger.application.controller;
+package com.vercel.challenger.application.router;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,7 @@ import java.net.URI;
 
 @Slf4j
 @Controller
-public class AuthController {
+public class AuthRouter {
     @GetMapping("/")
     public Mono<String> home(ServerWebExchange exchange) {
         var sessionCookie = exchange.getRequest().getCookies().getFirst("SESSION");
